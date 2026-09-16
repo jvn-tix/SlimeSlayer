@@ -11,7 +11,7 @@ public class ShopManager : MonoBehaviour, IInteractable
         {
             bool isActive = shopUI.activeSelf;
             shopUI.SetActive(!isActive); // Toggle UI Toko
-            Time.timeScale = isActive ? 1f : 0f; // Pause game saat UI Toko aktif
+            //Time.timeScale = isActive ? 1f : 0f; // Pause game saat UI Toko aktif
         }
     }
 
