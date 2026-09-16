@@ -1533,12 +1533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3002e0cb60095344ca9361ff4e09579e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapTransition
-  confiner: {fileID: 1493313408}
-  mapBoundary: {fileID: 713776103}
-  spawnPoint: {fileID: 0}
-  enemyPrefab: {fileID: 0}
-  enemySpawnPoints: []
-  spawnRate: 3
+  targetSceneName: Map2
 --- !u!60 &713776106
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -12600,18 +12595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3002e0cb60095344ca9361ff4e09579e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapTransition
-  confiner: {fileID: 1493313408}
-  mapBoundary: {fileID: 713776103}
-  spawnPoint: {fileID: 34450398}
-  enemyPrefab: {fileID: 308447980027724304, guid: 9080dfc96c9402144b29196ee813c6d4, type: 3}
-  enemySpawnPoints:
-  - {fileID: 1359511624}
-  - {fileID: 1623871700}
-  - {fileID: 2086353351}
-  - {fileID: 1866581447}
-  - {fileID: 1150201779}
-  - {fileID: 169001974}
-  spawnRate: 10
+  targetSceneName: Map2
 --- !u!1 &1321792932
 GameObject:
   m_ObjectHideFlags: 0
