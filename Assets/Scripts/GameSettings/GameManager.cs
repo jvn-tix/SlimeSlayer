@@ -15,6 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text finalScoreText;
 
+    [Header("Stage Progress")]
+    public int currentStage = 1;
+    public int maxStage = 3;
+
+
     void Awake()
     {
         if (instance == null) instance = this;
@@ -71,6 +76,20 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
+    }
+
+    public void CompleteCurrentStage()
+    {
+        if(currentStage < maxStage)
+        {
+            currentStage++;
+            Debug.Log("Stage " + currentStage + " dimulai!");
+            // Tambahkan logika untuk memulai stage berikutnya
+        }
+        else
+        {
+            Debug.Log("Selamat! Kamu telah menyelesaikan semua stage!");
+        }
     }
 
     // Fungsi pendukung untuk Toko Upgrade kemarin
