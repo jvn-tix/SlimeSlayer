@@ -7,6 +7,9 @@ public class EnemyHealth : MonoBehaviour
     private int currentHealth;
     private Animator anim;
 
+    [Header("Reward")]
+    [SerializeField] private int coinReward = 1; 
+
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
     void Start()
@@ -44,7 +47,7 @@ public class EnemyHealth : MonoBehaviour
         Debug.Log("Musuh Mati!");
 
         if (GameManager.instance != null) { 
-            GameManager.instance.AddScore(1); // Tambahkan skor saat musuh mati
+            GameManager.instance.AddCoins(coinReward); 
         }
 
 

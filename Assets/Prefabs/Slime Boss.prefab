@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -3961932224046396895}
   - component: {fileID: -8315741522940356122}
   m_Layer: 6
-  m_Name: Rimuru
+  m_Name: Slime Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.86, y: -1.87, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fabf1b2d33877148a4c422f7bf37af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFollow
-  speed: 3
+  speed: 1.5
 --- !u!58 &4198253358236253590
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -222,5 +222,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ced6eda8b267024bbb9d0f23dba6f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 5
-  flashMaterial: {fileID: 2100000, guid: 4c090316ef6bb53418400a909da290b2, type: 2}
+  maxHealth: 10
+  coinReward: 5

@@ -7,13 +7,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [Header("Endless Score System")]
-    private int currentScore = 0;
-    [SerializeField] private TMP_Text scoreText;
+    [Header("Currency")]
+    public int currentCoins = 0;
+    public int totalCoinsCollected = 0;
+    [SerializeField] private TMP_Text coinText;
 
     [Header("Game Over UI")]
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private TMP_Text finalScoreText;
+    [SerializeField] private TMP_Text finalCoinsText;
 
     [Header("Stage Progress")]
     public int currentStage = 1;
@@ -22,53 +23,74 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null) instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
         else Destroy(gameObject);
     }
 
     void Start()
     {
-        if(gameOverPanel != null) gameOverPanel.SetActive(false);
-        UpdateScoreUI();
+        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        UpdateCoinsUI();
     }
 
-    // Fungsi menambah skor yang dipanggil saat musuh mati
-    public void AddScore(int amount)
+    // Fungsi menambah mata uang yang dipanggil saat pemain mengumpulkan koin
+    public void AddCoins(int amount)
     {
-        currentScore += amount;
-        UpdateScoreUI();
+        currentCoins += amount;
+        totalCoinsCollected += amount;
+        UpdateCoinsUI();
     }
 
-    void UpdateScoreUI()
+    public bool SpendCoins(int amount)
     {
-        if (scoreText != null)
+        if (currentCoins >= amount)
         {
-            scoreText.text = "Score: " + currentScore;
+            currentCoins -= amount;
+            UpdateCoinsUI();
+            return true;
+        }
+        else
+        {
+            Debug.Log("Tidak cukup koin!");
+            return false;
         }
     }
-    
+
+    void UpdateCoinsUI()
+    {
+        if (coinText != null)
+        {
+            coinText.text = "Coins: " + currentCoins;
+        }
+    }
+
     public void GameOver()
     {
-        Debug.Log("GAME OVER! Skor Akhir Kamu: " + currentScore);
+        Debug.Log("GAME OVER! Total Koin Kamu: " + totalCoinsCollected);
 
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
         }
-            
-        if (finalScoreText != null)
+
+        if (finalCoinsText != null)
         {
-            finalScoreText.text = "Final Score: " + currentScore;
+            finalCoinsText.text = "Final Coins: " + totalCoinsCollected;
         }
-        
+
         Time.timeScale = 0f;
-        //Contoh otomatis restart scene setelah player mati (opsional):
-        //Invoke("RestartGame", 2f);
     }
 
     public void RestartGame()
     {
         Time.timeScale = 1f;
+        currentCoins = 0;
+        totalCoinsCollected = 0;
+        currentStage = 1;
         SceneManager.LoadScene("Lobby");
     }
 
@@ -80,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     public void CompleteCurrentStage()
     {
-        if(currentStage < maxStage)
+        if (currentStage < maxStage)
         {
             currentStage++;
             Debug.Log("Stage " + currentStage + " dimulai!");
@@ -92,7 +114,5 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Fungsi pendukung untuk Toko Upgrade kemarin
-    public int GetCurrentScore() { return currentScore; }
-    public void ReduceScore(int amount) { currentScore -= amount; UpdateScoreUI(); }
+    public int GetCurrentCoins() { return currentCoins; }
 }

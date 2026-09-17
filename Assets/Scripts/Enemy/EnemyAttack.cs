@@ -14,13 +14,17 @@ public class EnemyAttack : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj != null) player = playerObj.transform;
+        FindPlayer();
     }
 
     void Update()
     {
-        if (player == null) return;
+        // Jika player belum ketemu (misal saat baru pindah scene), cari ulang
+        if (player == null)
+        {
+            FindPlayer();
+            return;
+        }
 
         float distance = Vector2.Distance(transform.position, player.position);
 
@@ -31,21 +35,37 @@ public class EnemyAttack : MonoBehaviour
         }
     }
 
+    void FindPlayer()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+    }
+
     void AttackPlayer()
     {
-        // 1. Hitung arah ke Player agar Blend Tree tahu animasi mana yang diputar
+        // 1. Hitung arah ke Player untuk Blend Tree
         Vector2 direction = ((Vector2)player.position - (Vector2)transform.position).normalized;
 
-        anim.SetFloat("InputX", direction.x);
-        anim.SetFloat("InputY", direction.y);
+        if (anim != null)
+        {
+            anim.SetFloat("InputX", direction.x);
+            anim.SetFloat("InputY", direction.y);
+        }
 
-        // 2. Trigger Blend Tree Serangan
-        //anim.SetTrigger("Attack");
-
-        // 3. Beri Damage
+        // 2. Beri Damage (Pencarian aman menggunakan TryGetComponent)
         if (player.TryGetComponent(out PlayerHealth playerHealth))
         {
             playerHealth.TakeDamage(damage);
         }
+    }
+
+    // Tampilkan jangkauan serangan di Scene View Unity agar mudah di-debug
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
