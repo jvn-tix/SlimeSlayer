@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
     private bool portalSpawned = false;
     void Start()
     {
-
+        SpawnEnemies();
     }
 
     void SpawnEnemies()
@@ -64,7 +64,10 @@ public class EnemySpawner : MonoBehaviour
         activeEnemies = 1;
 
         Vector3 spawnPosition = (bossSpawnPoint != null) ? bossSpawnPoint.position : spawnPoints[Random.Range(0, spawnPoints.Length)].position;
-        Instantiate(bossEnemy, spawnPosition, Quaternion.identity);
+        GameObject newBoss = Instantiate(bossEnemy, spawnPosition, Quaternion.identity);
+
+        EnemyTracker tracker = newBoss.AddComponent<EnemyTracker>();
+        tracker.spawner = this;
     }
 
     public void onEnemyDefeated()
