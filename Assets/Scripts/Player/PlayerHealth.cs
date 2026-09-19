@@ -13,7 +13,7 @@ public class PlayerHealth : MonoBehaviour
     private Coroutine flashCoroutine;
 
     [Header("Events")]
-    public UnityEvent<float> onHealthChanged;
+    public UnityEvent<float, float> onHealthChanged;
 
     void Start()
     {
@@ -31,7 +31,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
         // Memberitahu UI nilai awal darah
-        onHealthChanged.Invoke(currentHealth);
+        onHealthChanged.Invoke(currentHealth, maxHealth);
     }
 
     public void TakeDamage(int damage)
@@ -48,7 +48,7 @@ public class PlayerHealth : MonoBehaviour
         flashCoroutine = StartCoroutine(FlashRoutine());
 
         // Panggil UI Health Bar/Heart
-        onHealthChanged.Invoke(currentHealth);
+        onHealthChanged.Invoke(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
         {

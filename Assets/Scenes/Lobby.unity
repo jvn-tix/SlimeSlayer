@@ -2131,6 +2131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 340855147}
   - component: {fileID: 340855148}
+  - component: {fileID: 340855149}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -2211,6 +2212,19 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &340855149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 340855146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e1c04914ede9c42aa6c3654f78c763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthBarUI
+  healthSlider: {fileID: 340855148}
 --- !u!1 &357798706
 GameObject:
   m_ObjectHideFlags: 0
@@ -7856,9 +7870,9 @@ MonoBehaviour:
   onHealthChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 340855148}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
-        m_MethodName: set_value
+      - m_Target: {fileID: 340855149}
+        m_TargetAssemblyTypeName: HealthBarUI, Assembly-CSharp
+        m_MethodName: UpdateHealthBar
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
