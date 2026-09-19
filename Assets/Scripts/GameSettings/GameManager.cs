@@ -6,6 +6,14 @@ using Unity.VisualScripting; // Diperlukan untuk restart game
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    [Header("Player Stats")]
+    public int playerAttack = 3;
+    public int playerMaxHealth = 10;
+    public int playerCurrentHealth = 10;
+
+    [Header("Shop Settings")]
+    [SerializeField] private int attackUpgradeCost = 5;
+    [SerializeField] private int healthUpgradeCost = 5;
 
     [Header("Currency")]
     public int currentCoins = 0;
@@ -114,5 +122,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public bool upgradeAttack(int cost, int amount)
+    {
+        if (SpendCoins(cost))
+        {
+            playerAttack += amount;
+            Debug.Log("Attack upgraded to " + playerAttack);
+            return true;
+        }
+        else
+        {
+            Debug.Log("Tidak cukup koin untuk upgrade attack!");
+            return false;
+        }
+    }
+
+    public bool upgradeMaxHealth(int cost, int amount)
+    {
+        if (SpendCoins(cost))
+        {
+            playerMaxHealth += amount;
+            playerCurrentHealth += amount; // Juga menambah current health
+            Debug.Log("Max Health upgraded to " + playerMaxHealth);
+            return true;
+        }
+        else
+        {
+            Debug.Log("Tidak cukup koin untuk upgrade max health!");
+            return false;
+        }
+    }
+
+    public int GetAttackCost() { return attackUpgradeCost; }
+    public int GetHealthCost() { return healthUpgradeCost; }
     public int GetCurrentCoins() { return currentCoins; }
 }

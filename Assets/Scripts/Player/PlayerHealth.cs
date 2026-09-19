@@ -1,30 +1,53 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events; // Wajib untuk UnityEvent
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 5;
-    private float currentHealth;
+    [Header("Health Settings (Default)")]
+    [SerializeField] private int maxHealth = 10;
+    private int currentHealth;
+
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
+
+    [Header("Events")]
     public UnityEvent<float> onHealthChanged;
 
     void Start()
     {
-        currentHealth = maxHealth;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // 1. Sinkronkan nilai HP dari GameManager jika ada
+        if (GameManager.instance != null)
+        {
+            maxHealth = GameManager.instance.playerMaxHealth;
+            currentHealth = GameManager.instance.playerCurrentHealth;
+        }
+        else
+        {
+            currentHealth = maxHealth;
+        }
+
         // Memberitahu UI nilai awal darah
         onHealthChanged.Invoke(currentHealth);
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        StartCoroutine(FlashRoutine());
 
-        // Panggil semua UI yang terhubung
+        // 2. Simpan sisa HP terbaru ke GameManager
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.playerCurrentHealth = currentHealth;
+        }
+
+        if (flashCoroutine != null) StopCoroutine(flashCoroutine);
+        flashCoroutine = StartCoroutine(FlashRoutine());
+
+        // Panggil UI Health Bar/Heart
         onHealthChanged.Invoke(currentHealth);
 
         if (currentHealth <= 0)
@@ -35,13 +58,11 @@ public class PlayerHealth : MonoBehaviour
 
     private IEnumerator FlashRoutine()
     {
-        spriteRenderer.color = Color.white;
-        yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.15f);
         spriteRenderer.color = Color.white;
-
     }
+
     void Die()
     {
         Debug.Log("Player Mati!");
@@ -50,6 +71,7 @@ public class PlayerHealth : MonoBehaviour
         {
             GameManager.instance.GameOver();
         }
+
         Destroy(gameObject);
     }
 }

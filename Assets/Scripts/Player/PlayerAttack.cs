@@ -9,9 +9,9 @@ public class PlayerAttack : MonoBehaviour
     public Transform attackPoint;
     public LayerMask enemyLayers;
 
-    [Header("Pengaturan Serangan")]
+    [Header("Pengaturan Serangan Default")]
     public float attackRange = 0.5f;
-    public int attackDamage = 20;
+    public int defaultAttackDamage = 3; // Digunakan jika GameManager belum di-load
 
     void Start()
     {
@@ -20,7 +20,6 @@ public class PlayerAttack : MonoBehaviour
 
     public void Attack(InputAction.CallbackContext context)
     {
-        // Kita hanya ingin memicu serangan saat tombol pertama kali ditekan (Started)
         if (context.started)
         {
             PerformAttack();
@@ -29,14 +28,20 @@ public class PlayerAttack : MonoBehaviour
 
     void PerformAttack()
     {
-        anim.SetTrigger("Attack");
+        if (anim != null)
+        {
+            anim.SetTrigger("Attack");
+        }
+
+        // Ambil stat attack dari GameManager, kalau null pakai nilai default
+        int currentDamage = (GameManager.instance != null) ? GameManager.instance.playerAttack : defaultAttackDamage;
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
             if (enemy.TryGetComponent(out EnemyHealth health))
             {
-                health.TakeDamage(attackDamage);
+                health.TakeDamage(currentDamage);
             }
         }
     }
@@ -44,6 +49,7 @@ public class PlayerAttack : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         if (attackPoint == null) return;
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }

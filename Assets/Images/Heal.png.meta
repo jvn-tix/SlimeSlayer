@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 32be780e26e577f4a99bca63bf19290d
+guid: 6801ac153500d184a994af5a911a5a14
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6969427886737629405
-    second: AttackUpgrade_0
+      213: 2903848411162822477
+    second: Heal_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AttackUpgrade_0
+      name: Heal_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dd0a2b4ccb168b060800000000000000
-      internalID: 6969427886737629405
+      spriteID: d4741f4aeba8c4820800000000000000
+      internalID: 2903848411162822477
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      AttackUpgrade_0: 6969427886737629405
+      Heal_0: 2903848411162822477
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
