@@ -75,7 +75,26 @@ public class EnemySpawner : MonoBehaviour
         activeEnemies--;
         if (activeEnemies <= 0 && !portalSpawned)
         {
-            SpawnPortal();
+            int stage = 1;
+            int maxStage = 3;
+
+            if(GameManager.instance != null)
+            {
+                stage = GameManager.instance.currentStage;
+                maxStage = GameManager.instance.maxStage;
+            }
+            if(stage == maxStage)
+            {
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.Victory();
+                }
+            }
+            else
+            {
+                SpawnPortal();
+            }
+            
         }
     }
 
@@ -96,7 +115,7 @@ public class EnemyTracker : MonoBehaviour
     [HideInInspector] public EnemySpawner spawner;
     void OnDestroy()
     {
-        if (spawner != null)
+        if (spawner != null && gameObject.scene.isLoaded)
         {
             spawner.onEnemyDefeated();
         }

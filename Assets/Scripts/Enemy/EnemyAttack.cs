@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyAttack : MonoBehaviour
 {
     [Header("Pengaturan Serangan")]
-    public float attackRange = 0.8f;
+    public float attackRange = 1.5f;
     public float attackRate = 1.5f;
     public int damage = 1;
 
@@ -46,7 +46,6 @@ public class EnemyAttack : MonoBehaviour
 
     void AttackPlayer()
     {
-        // 1. Hitung arah ke Player untuk Blend Tree
         Vector2 direction = ((Vector2)player.position - (Vector2)transform.position).normalized;
 
         if (anim != null)
@@ -55,10 +54,14 @@ public class EnemyAttack : MonoBehaviour
             anim.SetFloat("InputY", direction.y);
         }
 
-        // 2. Beri Damage (Pencarian aman menggunakan TryGetComponent)
         if (player.TryGetComponent(out PlayerHealth playerHealth))
         {
             playerHealth.TakeDamage(damage);
+            Debug.Log("Slime berhasil menyerang Player!"); // Untuk tes di Console
+        }
+        else
+        {
+            Debug.LogWarning("Komponen PlayerHealth tidak ditemukan di GameObject Player!");
         }
     }
 

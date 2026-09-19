@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ced6eda8b267024bbb9d0f23dba6f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 10
+  maxHealth: 30
   coinReward: 5
 --- !u!114 &5541314107828081065
 MonoBehaviour:
@@ -222,6 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 267ae9231633280498194fc3136f8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
-  attackRange: 0.8
+  attackRange: 1.5
   attackRate: 1.5
-  damage: 3
+  damage: 5

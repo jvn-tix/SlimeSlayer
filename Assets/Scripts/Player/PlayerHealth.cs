@@ -1,13 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("Health Settings (Default)")]
-    [SerializeField] private int maxHealth = 10;
-    private int currentHealth;
+    [Header("Health Settings")]
+    [HideInInspector] public int maxHealth = 10;
+    [HideInInspector] public int currentHealth = 10;
 
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
@@ -19,26 +18,34 @@ public class PlayerHealth : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // 1. Sinkronkan nilai HP dari GameManager jika ada
+        // 1. Ambil data HP dari GameManager
         if (GameManager.instance != null)
         {
             maxHealth = GameManager.instance.playerMaxHealth;
             currentHealth = GameManager.instance.playerCurrentHealth;
         }
-        else
-        {
-            currentHealth = maxHealth;
-        }
 
-        // Memberitahu UI nilai awal darah
-        onHealthChanged.Invoke(currentHealth, maxHealth);
+        // 2. Hubungkan secara otomatis ke HealthBarUI di Canvas scene aktif
+        AutoConnectHealthBarUI();
+    }
+
+    public void AutoConnectHealthBarUI()
+    {
+        HealthBarUI healthBar = FindObjectOfType<HealthBarUI>();
+        if (healthBar != null)
+        {
+            onHealthChanged.RemoveAllListeners();
+            onHealthChanged.AddListener(healthBar.UpdateHealthBar);
+            onHealthChanged.Invoke(currentHealth, maxHealth); // Refresh visual slider
+        }
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        if (currentHealth < 0) currentHealth = 0;
 
-        // 2. Simpan sisa HP terbaru ke GameManager
+        // Simpan sisa HP ke GameManager
         if (GameManager.instance != null)
         {
             GameManager.instance.playerCurrentHealth = currentHealth;
@@ -47,7 +54,6 @@ public class PlayerHealth : MonoBehaviour
         if (flashCoroutine != null) StopCoroutine(flashCoroutine);
         flashCoroutine = StartCoroutine(FlashRoutine());
 
-        // Panggil UI Health Bar/Heart
         onHealthChanged.Invoke(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
@@ -56,11 +62,24 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void RefreshHealthFromGameManager()
+    {
+        if (GameManager.instance != null)
+        {
+            maxHealth = GameManager.instance.playerMaxHealth;
+            currentHealth = GameManager.instance.playerCurrentHealth;
+            onHealthChanged.Invoke(currentHealth, maxHealth);
+        }
+    }
+
     private IEnumerator FlashRoutine()
     {
-        spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(0.15f);
-        spriteRenderer.color = Color.white;
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.15f);
+            spriteRenderer.color = Color.white;
+        }
     }
 
     void Die()

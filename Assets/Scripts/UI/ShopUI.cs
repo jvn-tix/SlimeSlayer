@@ -52,8 +52,16 @@ public class ShopUI : MonoBehaviour
         {
             int cost = GameManager.instance.GetHealthCost();
             int amount = 2;
-            GameManager.instance.upgradeMaxHealth(cost, amount);
-            UpdateDisplay();
+            if (GameManager.instance.upgradeMaxHealth(cost, amount))
+            {
+                PlayerHealth playerHealth = FindFirstObjectByType<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    playerHealth.RefreshHealthFromGameManager();
+                }
+
+                UpdateDisplay();
+            }
         }
     }
 }

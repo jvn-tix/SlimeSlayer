@@ -1,11 +1,10 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting; // Diperlukan untuk restart game
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
     [Header("Player Stats")]
     public int playerAttack = 3;
     public int playerMaxHealth = 10;
@@ -18,16 +17,14 @@ public class GameManager : MonoBehaviour
     [Header("Currency")]
     public int currentCoins = 0;
     public int totalCoinsCollected = 0;
-    [SerializeField] private TMP_Text coinText;
 
-    [Header("Game Over UI")]
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private TMP_Text finalCoinsText;
 
     [Header("Stage Progress")]
     public int currentStage = 1;
     public int maxStage = 3;
 
+    private GameObject currentGameOverPanel;
+    private GameObject currentVictoryPanel;
 
     void Awake()
     {
@@ -36,21 +33,17 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else Destroy(gameObject);
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    void Start()
-    {
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        UpdateCoinsUI();
-    }
-
-    // Fungsi menambah mata uang yang dipanggil saat pemain mengumpulkan koin
     public void AddCoins(int amount)
     {
         currentCoins += amount;
         totalCoinsCollected += amount;
-        UpdateCoinsUI();
+        NotifyCoinUI();
     }
 
     public bool SpendCoins(int amount)
@@ -58,7 +51,7 @@ public class GameManager : MonoBehaviour
         if (currentCoins >= amount)
         {
             currentCoins -= amount;
-            UpdateCoinsUI();
+            NotifyCoinUI();
             return true;
         }
         else
@@ -68,26 +61,56 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UpdateCoinsUI()
+    // Memberitahu script CoinDisplayUI di scene aktif untuk update teks
+    public void NotifyCoinUI()
     {
-        if (coinText != null)
+        CoinDisplayUI coinUI = FindFirstObjectByType<CoinDisplayUI>();
+        if (coinUI != null)
         {
-            coinText.text = "Coins: " + currentCoins;
+            coinUI.UpdateDisplay();
         }
+    }
+
+    public void RegisterGameOverPanel(GameObject panel)
+    {
+        currentGameOverPanel = panel;
+        currentGameOverPanel.SetActive(false);
+    }
+
+    public void RegisterVictoryPanel(GameObject panel)
+    {
+        currentVictoryPanel = panel;
+        currentVictoryPanel.SetActive(false);
     }
 
     public void GameOver()
     {
-        Debug.Log("GAME OVER! Total Koin Kamu: " + totalCoinsCollected);
+        Debug.Log("GAME OVER DIPANGGIL!");
 
-        if (gameOverPanel != null)
+        if (currentGameOverPanel != null)
         {
-            gameOverPanel.SetActive(true);
+            Debug.Log("GameOverPanel ditemukan!");
+            currentGameOverPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("GameOverPanel belum terdaftar!");
         }
 
-        if (finalCoinsText != null)
+        Time.timeScale = 0f;
+    }
+
+    public void Victory()
+    {
+        Debug.Log("VICTORY DIPANGGIL!");
+
+        if (currentVictoryPanel != null)
         {
-            finalCoinsText.text = "Final Coins: " + totalCoinsCollected;
+            currentVictoryPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("VictoryPanel belum terdaftar!");
         }
 
         Time.timeScale = 0f;
@@ -99,6 +122,8 @@ public class GameManager : MonoBehaviour
         currentCoins = 0;
         totalCoinsCollected = 0;
         currentStage = 1;
+
+        playerCurrentHealth = playerMaxHealth;
         SceneManager.LoadScene("Lobby");
     }
 
@@ -107,14 +132,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
     }
-
     public void CompleteCurrentStage()
     {
         if (currentStage < maxStage)
         {
             currentStage++;
             Debug.Log("Stage " + currentStage + " dimulai!");
-            // Tambahkan logika untuk memulai stage berikutnya
         }
         else
         {
@@ -127,14 +150,9 @@ public class GameManager : MonoBehaviour
         if (SpendCoins(cost))
         {
             playerAttack += amount;
-            Debug.Log("Attack upgraded to " + playerAttack);
             return true;
         }
-        else
-        {
-            Debug.Log("Tidak cukup koin untuk upgrade attack!");
-            return false;
-        }
+        return false;
     }
 
     public bool upgradeMaxHealth(int cost, int amount)
@@ -142,15 +160,10 @@ public class GameManager : MonoBehaviour
         if (SpendCoins(cost))
         {
             playerMaxHealth += amount;
-            playerCurrentHealth += amount; // Juga menambah current health
-            Debug.Log("Max Health upgraded to " + playerMaxHealth);
+            playerCurrentHealth = playerMaxHealth;
             return true;
         }
-        else
-        {
-            Debug.Log("Tidak cukup koin untuk upgrade max health!");
-            return false;
-        }
+        return false;
     }
 
     public int GetAttackCost() { return attackUpgradeCost; }

@@ -222,6 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 267ae9231633280498194fc3136f8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
-  attackRange: 0.8
+  attackRange: 1.2
   attackRate: 1.5
   damage: 1
