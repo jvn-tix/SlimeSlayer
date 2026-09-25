@@ -7055,7 +7055,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Coin : '
+  m_text: 'COIN :'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8ddf4851e7b461b46ae7ed5702876450, type: 2}
   m_sharedMaterial: {fileID: -7611310521448228913, guid: 8ddf4851e7b461b46ae7ed5702876450, type: 2}
@@ -7592,13 +7592,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4816239015969533116, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1200830868}
   m_SourcePrefab: {fileID: 100100000, guid: 262b7545aee295249b9923fa763f0592, type: 3}
 --- !u!4 &1200830866 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7985908828247508889, guid: 262b7545aee295249b9923fa763f0592, type: 3}
   m_PrefabInstance: {fileID: 1200830865}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1200830867 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4816239015969533116, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+  m_PrefabInstance: {fileID: 1200830865}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1200830868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200830867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05c76419e9a7f204eb0402bcbec3ee7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Knockback
+  defaultForce: 5
+  knockbackDuration: 0.1
 --- !u!1 &1210404801
 GameObject:
   m_ObjectHideFlags: 0

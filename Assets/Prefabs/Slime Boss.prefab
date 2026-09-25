@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -8315741522940356122}
   - component: {fileID: 5541314107828081065}
   - component: {fileID: 8549752581098157830}
+  - component: {fileID: 6270032342483040983}
   m_Layer: 6
   m_Name: Slime Boss
   m_TagString: Untagged
@@ -225,3 +226,17 @@ MonoBehaviour:
   attackRange: 1.5
   attackRate: 1.5
   damage: 5
+--- !u!114 &6270032342483040983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308447980027724304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05c76419e9a7f204eb0402bcbec3ee7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Knockback
+  defaultForce: 2
+  knockbackDuration: 0.1

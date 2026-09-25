@@ -2866,13 +2866,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4816239015969533116, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 646367056}
   m_SourcePrefab: {fileID: 100100000, guid: 262b7545aee295249b9923fa763f0592, type: 3}
 --- !u!4 &646367054 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7985908828247508889, guid: 262b7545aee295249b9923fa763f0592, type: 3}
   m_PrefabInstance: {fileID: 646367053}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &646367055 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4816239015969533116, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+  m_PrefabInstance: {fileID: 646367053}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &646367056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646367055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05c76419e9a7f204eb0402bcbec3ee7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Knockback
+  defaultForce: 5
+  knockbackDuration: 0.1
 --- !u!1 &683474444
 GameObject:
   m_ObjectHideFlags: 0
@@ -7468,7 +7490,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &803536174
@@ -7850,7 +7872,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1060884715
@@ -7949,7 +7971,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Coin :'
+  m_text: 'COIN :'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8ddf4851e7b461b46ae7ed5702876450, type: 2}
   m_sharedMaterial: {fileID: -7611310521448228913, guid: 8ddf4851e7b461b46ae7ed5702876450, type: 2}
@@ -13384,8 +13406,6 @@ MonoBehaviour:
   healthUpgradeCost: 5
   currentCoins: 0
   totalCoinsCollected: 0
-  gameOverPanel: {fileID: 0}
-  victoryPanel: {fileID: 0}
   currentStage: 1
   maxStage: 3
 --- !u!4 &1893956397

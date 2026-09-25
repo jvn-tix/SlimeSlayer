@@ -24,7 +24,8 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth -= damage;
 
-        StartCoroutine(FlashRoutine());       
+        if(flashCoroutine != null) StopCoroutine(flashCoroutine);
+        flashCoroutine = StartCoroutine(FlashRoutine());       
         Debug.Log(gameObject.name + " kena hit! Sisa darah: " + currentHealth);
 
         if (currentHealth <= 0)

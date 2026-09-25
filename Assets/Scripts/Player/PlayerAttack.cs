@@ -11,7 +11,7 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Pengaturan Serangan Default")]
     public float attackRange = 0.5f;
-    public int defaultAttackDamage = 3; // Digunakan jika GameManager belum di-load
+    public int defaultAttackDamage = 3;
 
     void Start()
     {
@@ -42,6 +42,11 @@ public class PlayerAttack : MonoBehaviour
             if (enemy.TryGetComponent(out EnemyHealth health))
             {
                 health.TakeDamage(currentDamage);
+            }
+
+            if(enemy.TryGetComponent(out Knockback knockback))
+            {
+                knockback.ApplyKnockback(transform);
             }
         }
     }
