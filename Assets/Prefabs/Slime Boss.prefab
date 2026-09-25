@@ -197,6 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 30
   coinReward: 5
+  hitCameraShake: 1.5
 --- !u!114 &5541314107828081065
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -63,6 +63,11 @@ public class EnemyAttack : MonoBehaviour
         {
             Debug.LogWarning("Komponen PlayerHealth tidak ditemukan di GameObject Player!");
         }
+
+        if (player.TryGetComponent(out Knockback knockback))
+        {
+            knockback.ApplyKnockback(transform);
+        }
     }
 
     // Tampilkan jangkauan serangan di Scene View Unity agar mudah di-debug

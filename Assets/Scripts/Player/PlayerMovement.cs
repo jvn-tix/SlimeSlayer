@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private Animator animator;
+    private Knockback knockback;
 
     // Tambahkan referensi AttackPoint agar posisinya ikut berputar
     [SerializeField] private Transform attackPoint;
@@ -15,10 +16,13 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        knockback = GetComponent<Knockback>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        if (knockback != null && knockback.IsKnockedBack) return;
+
         rb.linearVelocity = moveInput * moveSpeed;
     }
 

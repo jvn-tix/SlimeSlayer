@@ -8,7 +8,9 @@ public class EnemyHealth : MonoBehaviour
     private Animator anim;
 
     [Header("Reward")]
-    [SerializeField] private int coinReward = 1; 
+    [SerializeField] private int coinReward = 1;
+
+    [SerializeField] private float hitCameraShake = 0.6f;
 
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
@@ -27,6 +29,11 @@ public class EnemyHealth : MonoBehaviour
         if(flashCoroutine != null) StopCoroutine(flashCoroutine);
         flashCoroutine = StartCoroutine(FlashRoutine());       
         Debug.Log(gameObject.name + " kena hit! Sisa darah: " + currentHealth);
+
+        if (CameraShake.instance != null)
+        {
+            CameraShake.instance.Shake(hitCameraShake);
+        }
 
         if (currentHealth <= 0)
         {

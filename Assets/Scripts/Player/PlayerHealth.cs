@@ -8,6 +8,11 @@ public class PlayerHealth : MonoBehaviour
     [HideInInspector] public int maxHealth = 10;
     [HideInInspector] public int currentHealth = 10;
 
+    [Header("I-Frames Settings")]
+    [SerializeField] private float iFrameDuration = 0.8f;
+    [SerializeField] private int numberOfFlashes = 5;
+    private bool isInvincible = false;
+
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
 
@@ -31,7 +36,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void AutoConnectHealthBarUI()
     {
-        HealthBarUI healthBar = FindObjectOfType<HealthBarUI>();
+        HealthBarUI healthBar = FindFirstObjectByType<HealthBarUI>();
         if (healthBar != null)
         {
             onHealthChanged.RemoveAllListeners();
@@ -42,6 +47,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (isInvincible) return;
+
         currentHealth -= damage;
         if (currentHealth < 0) currentHealth = 0;
 
@@ -60,6 +67,11 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
+
+        if(CameraShake.instance != null)
+        {
+            CameraShake.instance.Shake(1f);
+        }
     }
 
     public void RefreshHealthFromGameManager()
@@ -74,12 +86,24 @@ public class PlayerHealth : MonoBehaviour
 
     private IEnumerator FlashRoutine()
     {
+        isInvincible = true;
+
         if (spriteRenderer != null)
         {
-            spriteRenderer.color = Color.red;
-            yield return new WaitForSeconds(0.15f);
-            spriteRenderer.color = Color.white;
+            float flashInterval = iFrameDuration / (numberOfFlashes * 2);
+            for (int i = 0; i < numberOfFlashes; i++)
+            {
+                spriteRenderer.color = Color.red;
+                yield return new WaitForSeconds(flashInterval);
+                spriteRenderer.color = Color.white;
+                yield return new WaitForSeconds(flashInterval);
+            }
         }
+        else
+        {
+            yield return new WaitForSeconds(iFrameDuration);
+        }
+        isInvincible = false;
     }
 
     void Die()

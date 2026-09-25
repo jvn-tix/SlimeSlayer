@@ -10,18 +10,21 @@ public class EnemyMovement : MonoBehaviour
     private Transform player;
     private Animator anim;
     private Rigidbody2D rb;
+    private Knockback knockback;
 
     void Start()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        knockback = GetComponent<Knockback>();
 
-        // Pastikan Rigidbody2D diset ke Dynamic dan Freeze Rotation Z di Inspector
         FindPlayer();
     }
 
     void Update()
     {
+        if(knockback != null && knockback.IsKnockedBack) return;
+
         if (player == null)
         {
             FindPlayer();
@@ -53,7 +56,8 @@ public class EnemyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Pergerakan berbasis fisika dijalankan di FixedUpdate
+        if(knockback != null && knockback.IsKnockedBack) return;
+
         if (player != null)
         {
             float distance = Vector2.Distance(transform.position, player.position);
