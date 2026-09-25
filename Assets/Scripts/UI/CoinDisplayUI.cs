@@ -19,7 +19,7 @@ public class CoinDisplayUI : MonoBehaviour
     {
         if (GameManager.instance != null && coinText != null)
         {
-            coinText.text = "COINS : " + GameManager.instance.currentCoins;
+            coinText.text = "COIN : " + GameManager.instance.currentCoins;
         }
     }
 }

@@ -12,6 +12,8 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] private float hitCameraShake = 0.6f;
 
+    [SerializeField] private GameObject explodeVFX;
+
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
     void Start()
@@ -23,7 +25,7 @@ public class EnemyHealth : MonoBehaviour
     }
 
     public void TakeDamage(int damage)
-    {
+    {   
         currentHealth -= damage;
 
         if(flashCoroutine != null) StopCoroutine(flashCoroutine);
@@ -53,6 +55,13 @@ public class EnemyHealth : MonoBehaviour
     void Die()
     {
         Debug.Log("Musuh Mati!");
+
+        if(explodeVFX != null)
+        {
+            Vector3 spawnPosition = transform.position;
+            spawnPosition.z = -1f;
+            Instantiate(explodeVFX, spawnPosition, Quaternion.identity);
+        }
 
         if (GameManager.instance != null) { 
             GameManager.instance.AddCoins(coinReward); 

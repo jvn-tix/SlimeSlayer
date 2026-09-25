@@ -49,11 +49,6 @@ public class PlayerAttack : MonoBehaviour
                 knockback.ApplyKnockback(transform);
             }
         }
-
-        //if(CameraShake.instance != null)
-        //{
-        //    CameraShake.instance.Shake(0.8f);
-        //}
     }
 
     void OnDrawGizmosSelected()

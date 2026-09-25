@@ -7647,6 +7647,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6458412519879219275, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: onHealthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 340855149}
+    - target: {fileID: 6458412519879219275, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: onHealthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: UpdateHealthBar
+      objectReference: {fileID: 0}
     - target: {fileID: 7985908828247508889, guid: 262b7545aee295249b9923fa763f0592, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.04

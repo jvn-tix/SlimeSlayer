@@ -70,7 +70,7 @@ public class PlayerHealth : MonoBehaviour
 
         if(CameraShake.instance != null)
         {
-            CameraShake.instance.Shake(1f);
+            CameraShake.instance.Shake(0.1f);
         }
     }
 

@@ -198,6 +198,7 @@ MonoBehaviour:
   maxHealth: 5
   coinReward: 1
   hitCameraShake: 0.3
+  explodeVFX: {fileID: 7655586972744699071, guid: ebbc0921aa2d997419547bdb3070d74e, type: 3}
 --- !u!114 &5541314107828081065
 MonoBehaviour:
   m_ObjectHideFlags: 0
