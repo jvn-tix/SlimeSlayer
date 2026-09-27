@@ -16,6 +16,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private GameObject portalPrefab;
     [SerializeField] private Transform portalSpawnPoint;
 
+    [Header("Boss UI Settings")]
+    [SerializeField] private BossHealthBar bossHealthBar;
+    [SerializeField] private string bossName = "SLIME BOSS";
+
     private int activeEnemies = 0;
     private bool portalSpawned = false;
     void Start()
@@ -65,6 +69,13 @@ public class EnemySpawner : MonoBehaviour
 
         Vector3 spawnPosition = (bossSpawnPoint != null) ? bossSpawnPoint.position : spawnPoints[Random.Range(0, spawnPoints.Length)].position;
         GameObject newBoss = Instantiate(bossEnemy, spawnPosition, Quaternion.identity);
+
+        EnemyHealth bossHealth = newBoss.GetComponent<EnemyHealth>();
+        if (bossHealth != null && bossHealthBar != null)
+        {
+            bossHealthBar.ActivateBossHealthBar(bossName, bossHealth.GetMaxHealth());
+            bossHealth.SetBossHealthBar(bossHealthBar);
+        }
 
         EnemyTracker tracker = newBoss.AddComponent<EnemyTracker>();
         tracker.spawner = this;

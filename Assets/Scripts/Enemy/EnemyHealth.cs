@@ -5,7 +5,10 @@ public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 100;
     private int currentHealth;
-    private Animator anim;
+
+    [Header("UI Health Bar")]
+    [SerializeField] private EnemyHealthBar enemyHealthBar; // Pasang jika ini Kroco
+    private BossHealthBar bossHealthBar;                    // Diisi otomatis jika ini Boss
 
     [Header("Reward")]
     [SerializeField] private int coinReward = 1;
@@ -16,20 +19,50 @@ public class EnemyHealth : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
+
     void Start()
     {
         currentHealth = maxHealth;
-        anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
+        // Update health bar kroco di awal
+        if (enemyHealthBar != null)
+        {
+            enemyHealthBar.UpdateHealth(currentHealth, maxHealth);
+        }
+    }
+
+    // Dipanggil oleh EnemySpawner saat Boss di-spawn
+    public void SetBossHealthBar(BossHealthBar healthBar)
+    {
+        bossHealthBar = healthBar;
+    }
+
+    public int GetMaxHealth()
+    {
+        return maxHealth;
     }
 
     public void TakeDamage(int damage)
-    {   
+    {
         currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        if(flashCoroutine != null) StopCoroutine(flashCoroutine);
-        flashCoroutine = StartCoroutine(FlashRoutine());       
+        // --- UPDATE HEALTH BAR ---
+        // 1. Jika ini Kroco
+        if (enemyHealthBar != null)
+        {
+            enemyHealthBar.UpdateHealth(currentHealth, maxHealth);
+        }
+
+        // 2. Jika ini Boss
+        if (bossHealthBar != null)
+        {
+            bossHealthBar.UpdateBossHealth(currentHealth);
+        }
+
+        if (flashCoroutine != null) StopCoroutine(flashCoroutine);
+        flashCoroutine = StartCoroutine(FlashRoutine());
         Debug.Log(gameObject.name + " kena hit! Sisa darah: " + currentHealth);
 
         if (CameraShake.instance != null)
@@ -50,23 +83,23 @@ public class EnemyHealth : MonoBehaviour
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = Color.white;
-
     }
+
     void Die()
     {
         Debug.Log("Musuh Mati!");
 
-        if(explodeVFX != null)
+        if (explodeVFX != null)
         {
             Vector3 spawnPosition = transform.position;
             spawnPosition.z = -1f;
             Instantiate(explodeVFX, spawnPosition, Quaternion.identity);
         }
 
-        if (GameManager.instance != null) { 
-            GameManager.instance.AddCoins(coinReward); 
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.AddCoins(coinReward);
         }
-
 
         Destroy(gameObject);
     }

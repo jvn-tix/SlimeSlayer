@@ -195,7 +195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ced6eda8b267024bbb9d0f23dba6f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 30
+  maxHealth: 20
+  enemyHealthBar: {fileID: 0}
   coinReward: 5
   hitCameraShake: 1.5
   explodeVFX: {fileID: 7655586972744699071, guid: ebbc0921aa2d997419547bdb3070d74e, type: 3}
@@ -225,9 +226,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 267ae9231633280498194fc3136f8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
-  attackRange: 1.5
+  attackRange: 4
   attackRate: 1.5
-  damage: 5
+  damage: 3
 --- !u!114 &6270032342483040983
 MonoBehaviour:
   m_ObjectHideFlags: 0

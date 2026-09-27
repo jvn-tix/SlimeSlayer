@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Wajib untuk fungsi pindah scene
+using UnityEngine.SceneManagement;
 
 public class MapTransition : MonoBehaviour
 {
@@ -7,20 +7,44 @@ public class MapTransition : MonoBehaviour
     [SerializeField] private string targetSceneName = "Lobby";
     [SerializeField] private bool isReturnToLobby = false;
 
+    // Cooldown agar tidak langsung ke-trigger saat spawn di dekat portal
+    [SerializeField] private float transitionCooldown = 1.0f;
+    private static float lastTransitionTime;
+    private bool isTransitioning = false;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Cek apakah yang menginjak trigger adalah Player
+        // Pastikan yang masuk adalah Player
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("Player masuk trigger, pindah ke: " + targetSceneName);
-
-            if(isReturnToLobby && GameManager.instance != null)
+            // Cek apakah masih dalam masa cooldown dari transisi sebelumnya
+            if (Time.time < lastTransitionTime + transitionCooldown)
             {
-                // Jika ingin kembali ke Lobby, set currentStage ke 1
+                return;
+            }
+
+            // Jika sedang proses transisi, cegah pemanggilan berulang
+            if (isTransitioning) return;
+
+            isTransitioning = true;
+            lastTransitionTime = Time.time;
+
+            Debug.Log("Player masuk portal, pindah ke: " + targetSceneName);
+
+            if (isReturnToLobby && GameManager.instance != null)
+            {
                 GameManager.instance.CompleteCurrentStage();
             }
-            
-            SceneManager.LoadScene(targetSceneName);
+
+            // Panggil SceneController
+            if (SceneController.Instance != null)
+            {
+                SceneController.Instance.LoadSceneByName(targetSceneName);
+            }
+            else
+            {
+                SceneManager.LoadScene(targetSceneName);
+            }
         }
     }
 }

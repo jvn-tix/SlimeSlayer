@@ -2823,6 +2823,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4867561720725203838, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: attackSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 91f5feb33870003449b61c59e2d89388, type: 3}
+    - target: {fileID: 6324777715496239321, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: moveSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 0221ab58aafdab44cb9d2156b2be0d61, type: 3}
+    - target: {fileID: 6324777715496239321, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: moveInterval
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6324777715496239321, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: moveSFXVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6458412519879219275, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: onHealthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 340855149}
+    - target: {fileID: 6458412519879219275, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: onHealthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: UpdateHealthBar
+      objectReference: {fileID: 0}
     - target: {fileID: 7985908828247508889, guid: 262b7545aee295249b9923fa763f0592, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.02

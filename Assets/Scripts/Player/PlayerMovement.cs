@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
@@ -8,15 +10,28 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     private Animator animator;
     private Knockback knockback;
-
-    // Tambahkan referensi AttackPoint agar posisinya ikut berputar
     [SerializeField] private Transform attackPoint;
-
+    [Header("SFX")]
+    [SerializeField] private AudioClip moveSFX;
+    [SerializeField] [UnityEngine.Range(0f, 1f)] private float moveSFXVolume = 1f;
+    private AudioSource audioSource;
+    private float moveTimer;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         knockback = GetComponent<Knockback>();
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+    }
+
+    private void Update()
+    {
+        HandleMoveSFX();
     }
 
     void FixedUpdate()
@@ -24,6 +39,32 @@ public class PlayerMovement : MonoBehaviour
         if (knockback != null && knockback.IsKnockedBack) return;
 
         rb.linearVelocity = moveInput * moveSpeed;
+    }
+
+    private void HandleMoveSFX()
+    {
+        // Cek jika player sedang bergerak dan tidak terkena knockback
+        bool isMoving = moveInput.sqrMagnitude > 0.01f && (knockback == null || !knockback.IsKnockedBack);
+
+        if (isMoving)
+        {
+            // Jika suara belum jalan, putar audio dengan mode loop
+            if (!audioSource.isPlaying && moveSFX != null)
+            {
+                audioSource.clip = moveSFX;
+                audioSource.volume = moveSFXVolume;
+                audioSource.loop = true; // Agar audio berulang otomatis
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            // Jika player berhenti, langsung matikan suaranya
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+        }
     }
 
     public void Move(InputAction.CallbackContext context)

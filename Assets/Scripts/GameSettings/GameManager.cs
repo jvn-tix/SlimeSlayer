@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     public int currentCoins = 0;
     public int totalCoinsCollected = 0;
 
-
     [Header("Stage Progress")]
     public int currentStage = 1;
     public int maxStage = 3;
@@ -38,6 +37,56 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // Dipanggil otomatis setiap kali scene baru selesai dimuat
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Time.timeScale = 1f;
+
+        // Reset referensi panel UI agar tidak menyimpan objek lama yang sudah hancur
+        currentGameOverPanel = null;
+        currentVictoryPanel = null;
+
+        // Jika kembali ke scene Menu Utama, otomatis bersihkan progres game
+        if (scene.name == "Menu")
+        {
+            ResetFullGameProgress();
+        }
+    }
+
+    // -------------------------------------------------------------
+    // LOGIKA HEALTH & PROGRES
+    // -------------------------------------------------------------
+
+    // Memulihkan nyawa player kembali penuh
+    public void ResetPlayerHealth()
+    {
+        playerCurrentHealth = playerMaxHealth;
+        Debug.Log("Nyawa player berhasil di-reset penuh: " + playerCurrentHealth);
+    }
+
+    // Reset seluruh progres jika ulang dari awal
+    public void ResetFullGameProgress()
+    {
+        currentCoins = 0;
+        totalCoinsCollected = 0;
+        currentStage = 1;
+        ResetPlayerHealth();
+    }
+
+    // -------------------------------------------------------------
+    // CURRENCY & UI
+    // -------------------------------------------------------------
 
     public void AddCoins(int amount)
     {
@@ -61,7 +110,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Memberitahu script CoinDisplayUI di scene aktif untuk update teks
     public void NotifyCoinUI()
     {
         CoinDisplayUI coinUI = FindFirstObjectByType<CoinDisplayUI>();
@@ -71,16 +119,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // -------------------------------------------------------------
+    // REGISTRASI PANEL UI
+    // -------------------------------------------------------------
+
     public void RegisterGameOverPanel(GameObject panel)
     {
         currentGameOverPanel = panel;
-        currentGameOverPanel.SetActive(false);
+        if (currentGameOverPanel != null)
+        {
+            currentGameOverPanel.SetActive(false);
+        }
     }
 
     public void RegisterVictoryPanel(GameObject panel)
     {
         currentVictoryPanel = panel;
-        currentVictoryPanel.SetActive(false);
+        if (currentVictoryPanel != null)
+        {
+            currentVictoryPanel.SetActive(false);
+        }
     }
 
     public void GameOver()
@@ -116,34 +174,57 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
+    // -------------------------------------------------------------
+    // NAVIGASI SCENE
+    // -------------------------------------------------------------
+
     public void RestartGame()
     {
         Time.timeScale = 1f;
-        currentCoins = 0;
-        totalCoinsCollected = 0;
-        currentStage = 1;
+        ResetFullGameProgress(); // Reset nyawa & koin saat retry
 
-        playerCurrentHealth = playerMaxHealth;
-        SceneManager.LoadScene("Lobby");
+        if (SceneController.Instance != null)
+        {
+            SceneController.Instance.LoadSceneByName("Lobby"); // Menggunakan SceneController async jika ada
+        }
+        else
+        {
+            SceneManager.LoadScene("Lobby");
+        }
     }
 
     public void BackToMainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Menu");
+        ResetFullGameProgress(); // Reset progres saat ke menu utama
+
+        if (SceneController.Instance != null)
+        {
+            SceneController.Instance.LoadSceneByName("Menu");
+        }
+        else
+        {
+            SceneManager.LoadScene("Menu");
+        }
     }
+
     public void CompleteCurrentStage()
     {
         if (currentStage < maxStage)
         {
             currentStage++;
             Debug.Log("Stage " + currentStage + " dimulai!");
+            // playerCurrentHealth sengaja tidak di-reset agar sisa nyawa dibawa ke stage berikutnya
         }
         else
         {
             Debug.Log("Selamat! Kamu telah menyelesaikan semua stage!");
         }
     }
+
+    // -------------------------------------------------------------
+    // UPGRADES
+    // -------------------------------------------------------------
 
     public bool upgradeAttack(int cost, int amount)
     {
@@ -160,7 +241,7 @@ public class GameManager : MonoBehaviour
         if (SpendCoins(cost))
         {
             playerMaxHealth += amount;
-            playerCurrentHealth = playerMaxHealth;
+            playerCurrentHealth = playerMaxHealth; // Isi darah penuh saat memperbesar kapasitas darah
             return true;
         }
         return false;

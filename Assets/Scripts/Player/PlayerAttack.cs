@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +14,9 @@ public class PlayerAttack : MonoBehaviour
     [Header("Pengaturan Serangan Default")]
     public float attackRange = 0.5f;
     public int defaultAttackDamage = 3;
+    [Header("SFX")]
+    [SerializeField]private AudioClip attackSFX;
+    [SerializeField] [UnityEngine.Range(0f, 1f)] private float attackSFXVolume = 1f;
 
     void Start()
     {
@@ -31,6 +36,11 @@ public class PlayerAttack : MonoBehaviour
         if (anim != null)
         {
             anim.SetTrigger("Attack");
+        }
+
+        if(attackSFX != null)
+        {
+            AudioSource.PlayClipAtPoint(attackSFX, transform.position, attackSFXVolume);
         }
 
         // Ambil stat attack dari GameManager, kalau null pakai nilai default
