@@ -200,6 +200,7 @@ MonoBehaviour:
   coinReward: 5
   hitCameraShake: 1.5
   explodeVFX: {fileID: 7655586972744699071, guid: ebbc0921aa2d997419547bdb3070d74e, type: 3}
+  damagePopup: {fileID: 2663814663969959002, guid: 6fd60a7adbacaa341992780f540acd3f, type: 3}
 --- !u!114 &5541314107828081065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 267ae9231633280498194fc3136f8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
-  attackRange: 4
+  attackRange: 2
   attackRate: 1.5
   damage: 3
 --- !u!114 &6270032342483040983

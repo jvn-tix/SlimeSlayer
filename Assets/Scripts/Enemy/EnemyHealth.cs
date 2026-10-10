@@ -17,6 +17,10 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] private GameObject explodeVFX;
 
+    [SerializeField] private GameObject damagePopup;
+    public static Transform canvasTransform;
+    private bool isInvincible = false;
+    private float invincibilityDuration = 0.2f;
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
 
@@ -29,6 +33,19 @@ public class EnemyHealth : MonoBehaviour
         if (enemyHealthBar != null)
         {
             enemyHealthBar.UpdateHealth(currentHealth, maxHealth);
+        }
+
+        if(canvasTransform == null)
+        {
+            Canvas mainCanvas = FindFirstObjectByType<Canvas>();
+            if (mainCanvas != null)
+            {
+                canvasTransform = mainCanvas.transform;
+            }
+            else
+            {
+                Debug.LogWarning("Canvas tidak ditemukan di Scene! Pastikan ada Canvas untuk UI.");
+            }
         }
     }
 
@@ -45,9 +62,14 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (isInvincible) return;
+
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
+        ShowDamagePopup(damage);
+
+        StartCoroutine(InvincibilityRoutine());
         // --- UPDATE HEALTH BAR ---
         // 1. Jika ini Kroco
         if (enemyHealthBar != null)
@@ -76,6 +98,22 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    void ShowDamagePopup(int damage)
+    {
+        if (damagePopup != null)
+        {
+            // Spawn langsung di posisi musuh + sedikit ke atas (tanpa lewat Canvas utama)
+            Vector3 spawnPos = transform.position + new Vector3(0, 1.2f, -0.1f);
+            GameObject popupObj = Instantiate(damagePopup, spawnPos, Quaternion.identity);
+
+            DamagePopup popup = popupObj.GetComponent<DamagePopup>();
+            if (popup != null)
+            {
+                popup.Setup(damage);
+            }
+        }
+    }
+
     private IEnumerator FlashRoutine()
     {
         spriteRenderer.color = Color.white;
@@ -85,6 +123,27 @@ public class EnemyHealth : MonoBehaviour
         spriteRenderer.color = Color.white;
     }
 
+    IEnumerator InvincibilityRoutine()
+    {
+        isInvincible = true;
+
+        // Efek kedip visual (berkedip transparan atau merah)
+        for (float i = 0; i < invincibilityDuration; i += 0.1f)
+        {
+            if (spriteRenderer != null)
+                spriteRenderer.color = new Color(1f, 1f, 1f, 0.4f); // Setengah transparan
+            yield return new WaitForSeconds(0.1f);
+
+            if (spriteRenderer != null)
+                spriteRenderer.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        if (spriteRenderer != null)
+            spriteRenderer.color = Color.white;
+
+        isInvincible = false;
+    }
     void Die()
     {
         Debug.Log("Musuh Mati!");

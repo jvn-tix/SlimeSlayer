@@ -9,8 +9,13 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("Enemy Settings")]
     [SerializeField] private Transform bossSpawnPoint;
-    [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private int baseEnemiesCount = 5;
+
+    [Header("Spawn Points")]
+    [SerializeField] private float minX = -6f;
+    [SerializeField] private float maxX = 6f;
+    [SerializeField] private float minY = -3f;
+    [SerializeField] private float maxY = 3f;
 
     [Header("Portal Settings")]
     [SerializeField] private GameObject portalPrefab;
@@ -55,8 +60,8 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < totalEnemies; i++)
         {
-            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-            GameObject newEnemy = Instantiate(normalEnemy, spawnPoint.position, Quaternion.identity);
+            Vector2 spawnPosition = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+            GameObject newEnemy = Instantiate(normalEnemy, spawnPosition, Quaternion.identity);
 
             EnemyTracker tracker = newEnemy.AddComponent<EnemyTracker>();
             tracker.spawner = this;
@@ -67,7 +72,7 @@ public class EnemySpawner : MonoBehaviour
     {
         activeEnemies = 1;
 
-        Vector3 spawnPosition = (bossSpawnPoint != null) ? bossSpawnPoint.position : spawnPoints[Random.Range(0, spawnPoints.Length)].position;
+        Vector2 spawnPosition = (bossSpawnPoint != null) ? bossSpawnPoint.position : new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
         GameObject newBoss = Instantiate(bossEnemy, spawnPosition, Quaternion.identity);
 
         EnemyHealth bossHealth = newBoss.GetComponent<EnemyHealth>();
