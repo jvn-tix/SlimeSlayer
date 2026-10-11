@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     private GameObject currentGameOverPanel;
     private GameObject currentVictoryPanel;
 
+    public CoinFeedbackUI coinFeedbackUI;
+
     void Awake()
     {
         if (instance == null)
@@ -91,6 +93,10 @@ public class GameManager : MonoBehaviour
     public void AddCoins(int amount)
     {
         currentCoins += amount;
+        if(coinFeedbackUI != null)
+        {
+            coinFeedbackUI.UpdateCoin(currentCoins);
+        }
         totalCoinsCollected += amount;
         NotifyCoinUI();
     }

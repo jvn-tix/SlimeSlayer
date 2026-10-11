@@ -10,7 +10,8 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private EnemyHealthBar enemyHealthBar; // Pasang jika ini Kroco
     private BossHealthBar bossHealthBar;                    // Diisi otomatis jika ini Boss
 
-    [Header("Reward")]
+    [Header("Coin Popup Settings")]
+    [SerializeField] private GameObject coinIconPopupPrefab;
     [SerializeField] private int coinReward = 1;
 
     [SerializeField] private float hitCameraShake = 0.6f;
@@ -148,6 +149,7 @@ public class EnemyHealth : MonoBehaviour
     {
         Debug.Log("Musuh Mati!");
 
+        // 1. Spawn VFX Ledakan (jika ada)
         if (explodeVFX != null)
         {
             Vector3 spawnPosition = transform.position;
@@ -155,11 +157,19 @@ public class EnemyHealth : MonoBehaviour
             Instantiate(explodeVFX, spawnPosition, Quaternion.identity);
         }
 
+        // 2. Spawn Coin Icon Popup di posisi musuh
+        if (coinIconPopupPrefab != null)
+        {
+            Instantiate(coinIconPopupPrefab, transform.position, Quaternion.identity);
+        }
+
+        // 3. Tambahkan Koin ke GameManager
         if (GameManager.instance != null)
         {
             GameManager.instance.AddCoins(coinReward);
         }
 
+        // 4. Hancurkan objek musuh
         Destroy(gameObject);
     }
 }
