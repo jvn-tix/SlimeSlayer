@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class GameOverUI : MonoBehaviour
 {
+    private GameManager gameManager;
     public void RetryGame()
     {
         Time.timeScale = 1f;
@@ -16,6 +17,8 @@ public class GameOverUI : MonoBehaviour
             Debug.LogWarning("SceneController Instance NULL! Menggunakan SceneManager fallback.");
             SceneManager.LoadScene("Lobby");
         }
+
+        gameManager.ResetFullGameProgress();
     }
 
     public void BackToMenu()

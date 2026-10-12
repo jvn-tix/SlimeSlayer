@@ -29,6 +29,7 @@ public class ShopUI : MonoBehaviour
 
         if (attackCostText != null)
             attackCostText.text = GameManager.instance.GetAttackCost().ToString();
+
         if (healthCostText != null)
             healthCostText.text = GameManager.instance.GetHealthCost().ToString();
     }
@@ -40,8 +41,18 @@ public class ShopUI : MonoBehaviour
         {
             int cost = GameManager.instance.GetAttackCost();
             int amount = 1;
-            GameManager.instance.upgradeAttack(cost, amount);
-            UpdateDisplay();
+
+            // Jika upgrade berhasil (koin cukup)
+            if (GameManager.instance.upgradeAttack(cost, amount))
+            {
+                // Putar SFX Level Up / Upgrade Sukses
+                if (AudioManager.instance != null)
+                {
+                    AudioManager.instance.PlayLevelUp();
+                }
+
+                UpdateDisplay();
+            }
         }
     }
 
@@ -52,12 +63,20 @@ public class ShopUI : MonoBehaviour
         {
             int cost = GameManager.instance.GetHealthCost();
             int amount = 2;
+
+            // Jika upgrade berhasil (koin cukup)
             if (GameManager.instance.upgradeMaxHealth(cost, amount))
             {
                 PlayerHealth playerHealth = FindFirstObjectByType<PlayerHealth>();
                 if (playerHealth != null)
                 {
                     playerHealth.RefreshHealthFromGameManager();
+                }
+
+                // Putar SFX Level Up / Upgrade Sukses
+                if (AudioManager.instance != null)
+                {
+                    AudioManager.instance.PlayLevelUp();
                 }
 
                 UpdateDisplay();

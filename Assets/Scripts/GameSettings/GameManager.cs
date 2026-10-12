@@ -22,6 +22,10 @@ public class GameManager : MonoBehaviour
     public int currentStage = 1;
     public int maxStage = 3;
 
+    [Header("Audio Victory Settings")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip victorySound; 
+
     private GameObject currentGameOverPanel;
     private GameObject currentVictoryPanel;
 
@@ -175,6 +179,11 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("VictoryPanel belum terdaftar!");
+        }
+
+        if (audioSource != null && victorySound != null)
+        {
+            audioSource.PlayOneShot(victorySound);
         }
 
         Time.timeScale = 0f;
