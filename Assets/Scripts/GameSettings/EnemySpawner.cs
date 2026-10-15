@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class EnemySpawner : MonoBehaviour
     [Header("Enemy Settings")]
     [SerializeField] private Transform bossSpawnPoint;
     [SerializeField] private int baseEnemiesCount = 5;
+    [SerializeField] private float spawnDelay = 1.5f;
 
     [Header("Spawn Points")]
     [SerializeField] private float minX = -6f;
@@ -27,8 +29,10 @@ public class EnemySpawner : MonoBehaviour
 
     private int activeEnemies = 0;
     private bool portalSpawned = false;
-    void Start()
+
+    IEnumerator Start()
     {
+        yield return new WaitForSeconds(spawnDelay);
         SpawnEnemies();
     }
 

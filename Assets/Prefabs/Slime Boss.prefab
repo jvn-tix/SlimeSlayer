@@ -197,6 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 20
   enemyHealthBar: {fileID: 0}
+  coinIconPopupPrefab: {fileID: 7515715757092567737, guid: f54a57d687570894eb20e9bd8546345f, type: 3}
   coinReward: 5
   hitCameraShake: 1.5
   explodeVFX: {fileID: 7655586972744699071, guid: ebbc0921aa2d997419547bdb3070d74e, type: 3}

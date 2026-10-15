@@ -20,7 +20,7 @@ public class CoinPopup : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+            
         // Pentalan acak ke sumbu X
         float randomX = Random.Range(-0.8f, 0.8f);
         Vector3 endPosition = transform.position + new Vector3(randomX, floatDistance, 0f);
@@ -34,5 +34,15 @@ public class CoinPopup : MonoBehaviour
             .SetEase(Ease.InQuad)
             .SetDelay(duration * 0.1f)
             .OnComplete(() => Destroy(gameObject));
+    }
+
+    private void OnDestroy()
+    {
+        transform.DOKill();
+
+        if(spriteRenderer != null)
+        {
+            spriteRenderer.DOKill();
+        }
     }
 }

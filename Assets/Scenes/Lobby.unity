@@ -2983,6 +2983,10 @@ PrefabInstance:
       propertyPath: attackSFX
       value: 
       objectReference: {fileID: 8300000, guid: 91f5feb33870003449b61c59e2d89388, type: 3}
+    - target: {fileID: 4867561720725203838, guid: 262b7545aee295249b9923fa763f0592, type: 3}
+      propertyPath: attackRange
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 6324777715496239321, guid: 262b7545aee295249b9923fa763f0592, type: 3}
       propertyPath: moveSFX
       value: 

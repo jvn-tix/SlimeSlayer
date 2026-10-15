@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
 
     private GameObject currentGameOverPanel;
     private GameObject currentVictoryPanel;
-
     public CoinFeedbackUI coinFeedbackUI;
 
     void Awake()
@@ -87,6 +86,8 @@ public class GameManager : MonoBehaviour
         currentCoins = 0;
         totalCoinsCollected = 0;
         currentStage = 1;
+        playerAttack = 3;
+        playerMaxHealth = 10;
         ResetPlayerHealth();
     }
 
