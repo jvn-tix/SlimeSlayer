@@ -201,6 +201,7 @@ MonoBehaviour:
   coinReward: 5
   hitCameraShake: 1.5
   explodeVFX: {fileID: 7655586972744699071, guid: ebbc0921aa2d997419547bdb3070d74e, type: 3}
+  hitVFX: {fileID: 6270713455605352772, guid: 44166b62d06efcf4880a1cd24603eb13, type: 3}
   damagePopup: {fileID: 2663814663969959002, guid: 6fd60a7adbacaa341992780f540acd3f, type: 3}
 --- !u!114 &5541314107828081065
 MonoBehaviour:

@@ -16,7 +16,9 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] private float hitCameraShake = 0.6f;
 
+    [Header("VFX Settings")]
     [SerializeField] private GameObject explodeVFX;
+    [SerializeField] private GameObject hitVFX;
 
     [SerializeField] private GameObject damagePopup;
     public static Transform canvasTransform;
@@ -69,8 +71,15 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         ShowDamagePopup(damage);
-
         StartCoroutine(InvincibilityRoutine());
+
+        if(hitVFX != null)
+        {
+            Vector3 spawnPosition = transform.position + new Vector3(0, 0.5f, -0.1f);
+            GameObject splash = Instantiate(hitVFX, spawnPosition, Quaternion.identity);
+
+            Destroy(splash, 1f);
+        }
         // --- UPDATE HEALTH BAR ---
         // 1. Jika ini Kroco
         if (enemyHealthBar != null)
