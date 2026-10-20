@@ -7,14 +7,17 @@ public class EnemyHealth : MonoBehaviour
     private int currentHealth;
 
     [Header("UI Health Bar")]
-    [SerializeField] private EnemyHealthBar enemyHealthBar; // Pasang jika ini Kroco
-    private BossHealthBar bossHealthBar;                    // Diisi otomatis jika ini Boss
+    [SerializeField] private EnemyHealthBar enemyHealthBar; 
+    private BossHealthBar bossHealthBar;                  
 
     [Header("Coin Popup Settings")]
     [SerializeField] private GameObject coinIconPopupPrefab;
     [SerializeField] private int coinReward = 1;
 
+    [Header("Hit Feedback Settings")]
     [SerializeField] private float hitCameraShake = 0.6f;
+    [SerializeField] private float hitStopDuration = 0.1f;
+    private bool isHitStopped = false;
 
     [Header("VFX Settings")]
     [SerializeField] private GameObject explodeVFX;
@@ -31,7 +34,10 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
         spriteRenderer = GetComponent<SpriteRenderer>();
-
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
         // Update health bar kroco di awal
         if (enemyHealthBar != null)
         {
@@ -52,7 +58,6 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    // Dipanggil oleh EnemySpawner saat Boss di-spawn
     public void SetBossHealthBar(BossHealthBar healthBar)
     {
         bossHealthBar = healthBar;
@@ -70,15 +75,35 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        ShowDamagePopup(damage);
-        StartCoroutine(InvincibilityRoutine());
-
-        if(hitVFX != null)
+        if (hitVFX != null)
         {
-            Vector3 spawnPosition = transform.position + new Vector3(0, 0.5f, -0.1f);
-            GameObject splash = Instantiate(hitVFX, spawnPosition, Quaternion.identity);
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            Vector3 spawnPosition = transform.position + new Vector3(0, 0.3f, -0.1f);
+            Quaternion splashRotation = Quaternion.identity;
+
+            if (player != null)
+            {
+              
+                Vector2 dirFromPlayer = (transform.position - player.transform.position).normalized;
+
+                spawnPosition += new Vector3(dirFromPlayer.x, dirFromPlayer.y, 0) * 0.3f;
+
+                float angle = Mathf.Atan2(dirFromPlayer.y, dirFromPlayer.x) * Mathf.Rad2Deg;
+
+                splashRotation = Quaternion.Euler(0, 0, angle);
+            }
+            else
+            {
+                splashRotation = Quaternion.Euler(0, 0, Random.Range(0f, 360f));
+            }
+
+            GameObject splash = Instantiate(hitVFX, spawnPosition, splashRotation);
 
             Destroy(splash, 1f);
+
+            ShowDamagePopup(damage);
+            StartCoroutine(DoHitStop());
+            StartCoroutine(InvincibilityRoutine());
         }
         // --- UPDATE HEALTH BAR ---
         // 1. Jika ini Kroco
@@ -124,6 +149,40 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    public IEnumerator DoHitStop()
+    {
+        if (isHitStopped) yield break;
+        isHitStopped = true;
+
+        // 1. Ambil komponen Rigidbody2D dan Animator milik musuh
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        Animator anim = GetComponentInChildren<Animator>();
+
+        // 2. Simpan kecepatan asli, lalu hentikan gerak sesaat (tanpa mematikan simulasi fisika!)
+        Vector2 savedVelocity = Vector2.zero;
+        if (rb != null)
+        {
+            savedVelocity = rb.linearVelocity;
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        // 3. Freeze animasinya sebentar biar posenya "nempel"
+        if (anim != null)
+        {
+            anim.speed = 0f;
+        }
+
+        // 4. Tunggu durasi hit stop
+        yield return new WaitForSeconds(hitStopDuration);
+
+        // 5. Kembalikan animasi ke normal
+        if (anim != null)
+        {
+            anim.speed = 1f;
+        }
+
+        isHitStopped = false;
+    }
     private IEnumerator FlashRoutine()
     {
         spriteRenderer.color = Color.white;
