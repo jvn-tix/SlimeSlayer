@@ -255,3 +255,6 @@ flowchart TD
 
 ## Credits
 Game developed as a Game Programming Project Individually.
+
+- Engine : Unity
+- Assets : Free assets itch.io
